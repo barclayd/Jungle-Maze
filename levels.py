@@ -3,7 +3,7 @@ level_1 = [
             "X  XXXXXXX          XXXXX",
             "X  XXXXXXX  XXXXXX  XXXXX",
             "X       XX  XXXXXX  XXXXX",
-            "X       XX  XXX        XX",
+            "XP      XX  XXX        XX",
             "XXXXXX  XX  XXX        XX",
             "XXXXXX  XX  XXXXXX  XXXXX",
             "XXXXXX  XX    XXXX  XXXXX",
