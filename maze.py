@@ -2,18 +2,24 @@ import turtle
 from levels import level_1
 
 wn = turtle.Screen()
-wn.bgcolor('#2F4F4F')
+wn.bgcolor('#1c2f2f')
 wn.title('Maze Game')
 wn.setup(width=700, height=700)
 wn.tracer(0)
+
+wn.register_shape("player-left.gif")
+wn.register_shape("player-right.gif")
+wn.register_shape("jungle.gif")
+wn.register_shape("gold.gif")
 
 
 # classes
 class Pen(turtle.Turtle):
     def __init__(self):
         turtle.Turtle.__init__(self)
-        self.shape("square")
         self.color('#362020')
+        # self.shape('square')
+        self.shape("jungle.gif")
         self.penup()
         self.speed(0)
 
@@ -23,8 +29,7 @@ class Player(turtle.Turtle):
         turtle.Turtle.__init__(self)
         self.penup()
         self.speed(0)
-        self.shape('triangle')
-        self.color('#19212a')
+        self.shape("player-right.gif")
         self.gold = 0
 
     def move_up(self):
@@ -47,6 +52,7 @@ class Player(turtle.Turtle):
         check = self.check_player_wall_collision(new_x_cor, new_y_cor)
         if check:
             self.setposition(new_x_cor, new_y_cor)
+            self.shape("player-left.gif")
 
     def move_right(self):
         new_x_cor = self.xcor() + 24
@@ -54,6 +60,7 @@ class Player(turtle.Turtle):
         check = self.check_player_wall_collision(new_x_cor, new_y_cor)
         if check:
             self.setposition(new_x_cor, new_y_cor)
+            self.shape("player-right.gif")
 
     def check_player_wall_collision(self, next_x, next_y):
         if (next_x, next_y) not in walls:
@@ -67,7 +74,7 @@ class Treasure(turtle.Turtle):
         turtle.Turtle.__init__(self)
         self.penup()
         self.speed(0)
-        self.shape('circle')
+        self.shape('gold.gif')
         self.color('#D4AF37')
         self.gold = 100
         self.goto(x, y)
@@ -108,7 +115,6 @@ def setup_maze(level):
 
             if character == 'T':
                 treasures.append(Treasure(screen_x, screen_y))
-                print(screen_x, screen_y)
 
 
 # class instances

@@ -1,2 +1,3 @@
-# Maze-Game
-Maze Game built using Python
+# Jungle Maze 
+
+Jungle themed maze game built using Python
