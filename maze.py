@@ -23,8 +23,9 @@ class Player(turtle.Turtle):
         turtle.Turtle.__init__(self)
         self.penup()
         self.speed(0)
-        self.shape('circle')
+        self.shape('triangle')
         self.color('#19212a')
+        self.gold = 0
 
     def move_up(self):
         new_x_cor = self.xcor()
@@ -61,9 +62,25 @@ class Player(turtle.Turtle):
             return False
 
 
+class Treasure(turtle.Turtle):
+    def __init__(self, x, y):
+        turtle.Turtle.__init__(self)
+        self.penup()
+        self.speed(0)
+        self.shape('circle')
+        self.color('#D4AF37')
+        self.gold = 100
+        self.goto(x, y)
+
+    def hide_treasure(self):
+        self.setposition(2000, 2000)
+        self.hideturtle()
+
+
 # game status
 levelsList = []
 walls = []
+treasures = []
 
 # levels
 levelsList.append(level_1)
@@ -89,6 +106,10 @@ def setup_maze(level):
             if character == 'P':
                 player.setposition(screen_x, screen_y)
 
+            if character == 'T':
+                treasures.append(Treasure(screen_x, screen_y))
+                print(screen_x, screen_y)
+
 
 # class instances
 pen = Pen()
@@ -107,5 +128,13 @@ setup_maze(levelsList[0])
 
 # main loop
 while True:
+    # check player and treasure collision
+    for treasure in treasures:
+        if treasure.distance(player) < 24:
+            player.gold += treasure.gold
+            print("Player's gold: {}".format(player.gold))
+            treasure.hide_treasure()
+            treasures.remove(treasure)
+
+    # update screen
     wn.update()
-    pass
