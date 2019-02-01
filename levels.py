@@ -22,6 +22,6 @@ level_1 = [
             "XX   XXXXXXXXXXXXX  XXXXX",
             "XX    XXXXXXXXXXXX  XXXXX",
             "XX           XXXX       X",
-            "XXXX                    X",
+            "XXXX                   TX",
             "XXXXXXXXXXXXXXXXXXXXXXXXX"
            ]
