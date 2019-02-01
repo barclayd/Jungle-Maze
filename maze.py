@@ -27,22 +27,47 @@ class Player(turtle.Turtle):
         self.color('#19212a')
 
     def move_up(self):
-        self.setposition(self.xcor(), self.ycor() + 24)
+        new_x_cor = self.xcor()
+        new_y_cor = self.ycor() + 24
+        check = self.check_player_wall_collision(new_x_cor, new_y_cor)
+        if check:
+            self.setposition(new_x_cor, new_y_cor)
 
     def move_down(self):
-        self.setposition(self.xcor(), self.ycor() - 24)
+        new_x_cor = self.xcor()
+        new_y_cor = self.ycor() - 24
+        check = self.check_player_wall_collision(new_x_cor, new_y_cor)
+        if check:
+            self.setposition(self.xcor(), self.ycor() - 24)
 
     def move_left(self):
-        self.setposition(self.xcor() - 24, self.ycor())
+        new_x_cor = self.xcor() - 24
+        new_y_cor = self.ycor()
+        check = self.check_player_wall_collision(new_x_cor, new_y_cor)
+        if check:
+            self.setposition(new_x_cor, new_y_cor)
 
     def move_right(self):
-        self.setposition(self.xcor() + 24, self.ycor())
+        new_x_cor = self.xcor() + 24
+        new_y_cor = self.ycor()
+        check = self.check_player_wall_collision(new_x_cor, new_y_cor)
+        if check:
+            self.setposition(new_x_cor, new_y_cor)
+
+    def check_player_wall_collision(self, next_x, next_y):
+        if (next_x, next_y) not in walls:
+            return True
+        else:
+            return False
+
 
 # game status
 levelsList = []
+walls = []
 
 # levels
 levelsList.append(level_1)
+
 
 # functions
 def setup_maze(level):
@@ -59,6 +84,7 @@ def setup_maze(level):
             if character == 'X':
                 pen.goto(screen_x, screen_y)
                 pen.stamp()
+                walls.append((screen_x, screen_y))
 
             if character == 'P':
                 player.setposition(screen_x, screen_y)
