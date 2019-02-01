@@ -38,21 +38,21 @@ class Player(turtle.Turtle):
     def move_up(self):
         new_x_cor = self.xcor()
         new_y_cor = self.ycor() + 24
-        check = self.check_player_collision(new_x_cor, new_y_cor, walls)
+        check = check_wall_collision(new_x_cor, new_y_cor, walls)
         if check:
             self.setposition(new_x_cor, new_y_cor)
 
     def move_down(self):
         new_x_cor = self.xcor()
         new_y_cor = self.ycor() - 24
-        check = self.check_player_collision(new_x_cor, new_y_cor, walls)
+        check = check_wall_collision(new_x_cor, new_y_cor, walls)
         if check:
             self.setposition(self.xcor(), self.ycor() - 24)
 
     def move_left(self):
         new_x_cor = self.xcor() - 24
         new_y_cor = self.ycor()
-        check = self.check_player_collision(new_x_cor, new_y_cor, walls)
+        check = check_wall_collision(new_x_cor, new_y_cor, walls)
         if check:
             self.setposition(new_x_cor, new_y_cor)
             self.shape("player-left.gif")
@@ -60,20 +60,13 @@ class Player(turtle.Turtle):
     def move_right(self):
         new_x_cor = self.xcor() + 24
         new_y_cor = self.ycor()
-        check = self.check_player_collision(new_x_cor, new_y_cor, walls)
+        check = check_wall_collision(new_x_cor, new_y_cor, walls)
         if check:
             self.setposition(new_x_cor, new_y_cor)
             self.shape("player-right.gif")
 
-    def check_player_collision(self, next_x, next_y, object_list):
-        if (next_x, next_y) not in object_list:
-            return True
-        else:
-            return False
-
     def hide(self):
-        self.setposition(2000, 2000)
-        self.hideturtle()
+        hide_sprite(self)
 
 
 class Treasure(turtle.Turtle):
@@ -88,8 +81,7 @@ class Treasure(turtle.Turtle):
         self.goto(x, y)
 
     def hide(self):
-        self.setposition(2000, 2000)
-        self.hideturtle()
+        hide_sprite(self)
 
 
 class Enemy(turtle.Turtle):
@@ -102,12 +94,6 @@ class Enemy(turtle.Turtle):
         self.shape('enemy-right.gif')
         self.setposition(x, y)
         self.direction = set_direction()
-
-    def check_enemy_collision(self, next_x, next_y, object_list):
-        if (next_x, next_y) not in object_list:
-            return True
-        else:
-            return False
 
     def change_direction(self):
         if self.direction == 'up':
@@ -125,12 +111,26 @@ class Enemy(turtle.Turtle):
             dy = 0
             self.shape('enemy-right.gif')
 
+        # check if player is near
+        if self.distance(player) < (difficulty * 100):
+            if player.xcor() < self.xcor():
+                self.direction = 'left'
+
+            elif player.xcor() > self.xcor():
+                self.direction = 'right'
+
+            elif player.ycor() < self.ycor():
+                self.direction = 'down'
+
+            elif player.ycor() > self.ycor():
+                self.direction = 'up'
+
         # move enemy
         move_to_x = self.xcor() + dx
         move_to_y = self.ycor() + dy
 
         # check for collisions
-        check = self.check_enemy_collision(move_to_x, move_to_y, walls)
+        check = check_wall_collision(move_to_x, move_to_y, walls)
         if check:
             self.setposition(move_to_x, move_to_y)
         else:
@@ -141,8 +141,7 @@ class Enemy(turtle.Turtle):
         wn.ontimer(self.change_direction, t=random.randint(100, 300))
 
     def hide(self):
-        self.setposition(2000, 2000)
-        self.hideturtle()
+        hide_sprite(self)
 
 
 # game status
@@ -150,6 +149,7 @@ levelsList = []
 walls = []
 treasures = []
 enemies = []
+difficulty = 1
 
 # levels
 levelsList.append(level_1)
@@ -183,10 +183,12 @@ def setup_maze(level):
 
 
 def collision_check(sprite1, sprite2, block_size):
+    global difficulty
     if sprite2.distance(sprite1) < block_size:
         if sprite2.name == 'Treasure':
             sprite1.gold += sprite2.gold
             sprite2.hide()
+            difficulty += 1
             treasures.remove(sprite2)
         if sprite2.name == 'Enemy':
             sprite1.hide()
@@ -200,6 +202,18 @@ def start_enemies_moving(t):
 
 def set_direction():
     return random.choice(['up', 'down', 'left', 'right'])
+
+
+def hide_sprite(sprite):
+    sprite.setposition(2000, 2000)
+    sprite.hideturtle()
+
+
+def check_wall_collision(next_x, next_y, object_list):
+    if (next_x, next_y) not in object_list:
+        return True
+    else:
+        return False
 
 
 # class instances
