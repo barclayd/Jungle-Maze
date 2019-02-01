@@ -1,6 +1,6 @@
 import turtle
 import random
-from levels import level_1
+from levels import level_1, level_2
 from sprites import sprite_images
 
 wn = turtle.Screen()
@@ -153,7 +153,7 @@ difficulty = 1
 
 # levels
 levelsList.append(level_1)
-
+levelsList.append(level_2)
 
 # functions
 def setup_maze(level):
@@ -192,7 +192,7 @@ def collision_check(sprite1, sprite2, block_size):
             treasures.remove(sprite2)
         if sprite2.name == 'Enemy':
             sprite1.hide()
-            print("Player with {} gold was killed by Enemy. GAME OVER!".format(player.gold))
+            print("Player with {} gold was killed by a hunting skeleton! GAME OVER!".format(player.gold))
 
 
 def start_enemies_moving(t):
@@ -229,7 +229,7 @@ wn.onkeypress(player.move_right, "Right")
 
 
 # append levels to levels list
-setup_maze(levelsList[0])
+setup_maze(levelsList[1])
 # set enemies moving after given timer
 start_enemies_moving(250)
 # main loop
